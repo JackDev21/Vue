@@ -24,9 +24,9 @@ function navHref(item: string): string {
   <div class="hero-header">
     <header class="topbar topbar--overlay">
       <div class="topbar__inner">
-        <div class="topbar__item">📍 Calle Principal 12, Vitoria-Gasteiz, Álava</div>
-        <div class="topbar__item">✉ reservas@hotelatlanta.com</div>
-        <div class="topbar__item">☎ +34 945 12 34 56</div>
+        <div class="topbar__item">📍 Calle Demo 1, 01000 Ciudad Ejemplo, España</div>
+        <div class="topbar__item">✉ reservas@hoteldemo.example</div>
+        <div class="topbar__item">☎ +34 900 000 000</div>
       </div>
     </header>
 
@@ -40,8 +40,8 @@ function navHref(item: string): string {
           </div>
           <div class="brand__copy">
             <p class="brand__eyebrow">Hotel &amp; Catering</p>
-            <h1 class="brand__name">Jardines de Uleta Suites</h1>
-            <p class="brand__location">Vitoria-Gasteiz</p>
+            <h1 class="brand__name">Hotel Demo Suites</h1>
+            <p class="brand__location">Ciudad Ejemplo</p>
           </div>
         </div>
 
