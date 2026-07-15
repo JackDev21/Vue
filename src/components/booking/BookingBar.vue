@@ -25,31 +25,57 @@ const {
 </script>
 
 <template>
-  <div ref="bookingRef" class="hero__booking booking-card" id="reservar">
-    <div v-if="calendarOpen" class="booking-calendar" @click.stop>
-      <div v-for="(month, monthIndex) in calendarMonths" :key="month.title" class="calendar-month">
-        <div class="calendar-month__header">
-          <h4 class="calendar-month__title">{{ month.title }}</h4>
+  <div
+    ref="bookingRef"
+    id="reservar"
+    class="absolute left-1/2 -translate-x-1/2 bottom-[2.9rem] max-md:bottom-[2.1rem] max-sm:bottom-[1.45rem] z-4 w-[min(1240px,calc(100%-2.2rem))] max-md:w-[min(100%-1.4rem,1240px)] max-sm:w-[calc(100%-0.95rem)] p-[0.42rem] border border-[#d7dde7] rounded-[0.18rem] bg-white/98 shadow-[0_12px_28px_rgba(0,0,0,0.14)]"
+  >
+    <div
+      v-if="calendarOpen"
+      class="absolute left-0 bottom-[calc(100%+0.9rem)] z-6 w-[min(760px,calc(100vw-2rem))] max-md:w-[min(760px,calc(100vw-1.5rem))] max-sm:left-1/2 max-sm:-translate-x-1/2 max-sm:w-[calc(100vw-0.9rem)] grid grid-cols-2 max-sm:grid-cols-1 gap-4 p-4 border border-[#e6e8ef] rounded-[0.18rem] bg-white shadow-[0_22px_42px_rgba(0,0,0,0.16)]"
+      @click.stop
+    >
+      <div
+        v-for="(month, monthIndex) in calendarMonths"
+        :key="month.title"
+        class="px-[0.35rem] pt-[0.15rem] pb-[0.4rem]"
+      >
+        <div class="flex items-center justify-between mb-[0.8rem]">
+          <h4 class="m-0 text-[#1f2a39] text-base font-bold capitalize">{{ month.title }}</h4>
           <button
             v-if="monthIndex === 1"
-            class="calendar-month__nav"
             type="button"
+            class="border-0 bg-transparent text-[#8d98ac] text-[1.45rem] leading-none cursor-pointer"
             @click="shiftVisibleMonth(1)"
           >
             ›
           </button>
         </div>
-
-        <div class="calendar-weekdays">
+        <div
+          class="grid grid-cols-7 mb-[0.35rem] text-[#7d8798] text-[0.85rem] lowercase text-center"
+        >
           <span v-for="day in weekdayLabels" :key="day">{{ day }}</span>
         </div>
-
-        <div class="calendar-days">
+        <div class="grid grid-cols-7 gap-[0.08rem]">
           <button
             v-for="cell in month.cells"
             :key="`${cell.date.getFullYear()}-${cell.date.getMonth()}-${cell.date.getDate()}`"
             type="button"
-            :class="getCalendarDayClass(cell.date, cell.inCurrentMonth)"
+            :class="[
+              'min-h-[2.45rem] border-0 rounded-[0.18rem] bg-transparent font-[inherit] cursor-pointer',
+              cell.disabled ? 'text-[#d2d8e3] cursor-not-allowed' : 'text-[#243143]',
+              !cell.inCurrentMonth && 'text-[#d2d8e3]',
+              getCalendarDayClass(cell.date, cell.inCurrentMonth).includes(
+                'calendar-day--in-range',
+              ) && 'bg-[#dcefd7] text-[#274026]',
+              (getCalendarDayClass(cell.date, cell.inCurrentMonth).includes(
+                'calendar-day--selected-start',
+              ) ||
+                getCalendarDayClass(cell.date, cell.inCurrentMonth).includes(
+                  'calendar-day--selected-end',
+                )) &&
+                'bg-[#3b7f2a]! text-white!',
+            ]"
             :disabled="cell.disabled"
             @click="selectCalendarDate(cell.date)"
           >
@@ -59,543 +85,173 @@ const {
       </div>
     </div>
 
-    <div class="booking-grid">
-      <div class="booking-grid__dates">
+    <div
+      class="grid grid-cols-[minmax(0,2.05fr)_minmax(0,2.45fr)_minmax(0,1.95fr)_170px] max-md:grid-cols-[1.05fr_1.05fr] max-sm:grid-cols-1 items-stretch gap-[0.85rem] max-md:gap-3 max-sm:gap-[0.65rem]"
+    >
+      <div
+        class="grid grid-cols-2 overflow-hidden border border-[#c7cfdb] rounded-[0.18rem] bg-white max-md:col-span-2 max-sm:col-span-1"
+      >
         <button
-          class="booking-field booking-field--date"
           type="button"
+          class="grid content-center gap-[0.16rem] min-h-18 px-[0.92rem] py-[0.72rem] border-0 border-r border-[#c7cfdb] text-[#617463] bg-white w-full cursor-pointer text-left"
           @click="openCalendar('start')"
         >
-          <span>Entrada</span>
-          <strong>{{ formatSelectedDay(startDate) }}</strong>
+          <span class="text-[0.68rem] uppercase tracking-[0.11em] text-[#7b8b7d] whitespace-nowrap"
+            >Entrada</span
+          >
+          <strong class="text-[#183b11] text-base font-normal">{{
+            formatSelectedDay(startDate)
+          }}</strong>
         </button>
         <button
-          class="booking-field booking-field--date booking-field--date-end"
           type="button"
+          class="grid content-center gap-[0.16rem] min-h-18 px-[0.92rem] py-[0.72rem] border-0 text-[#617463] bg-white w-full cursor-pointer text-left"
           @click="openCalendar('end')"
         >
-          <span>Salida</span>
-          <strong>{{ formatSelectedDay(endDate) }}</strong>
+          <span class="text-[0.68rem] uppercase tracking-[0.11em] text-[#7b8b7d] whitespace-nowrap"
+            >Salida</span
+          >
+          <strong class="text-[#183b11] text-base font-normal">{{
+            formatSelectedDay(endDate)
+          }}</strong>
         </button>
       </div>
 
-      <div class="booking-field booking-field--people">
-        <span>Huéspedes</span>
+      <div
+        class="relative grid grid-rows-[auto_1fr] content-center gap-[0.16rem] min-h-18 max-sm:min-h-17 px-[0.92rem] py-[0.72rem] border border-[#c7cfdb] text-[#617463] bg-white max-md:col-start-1 max-md:col-end-2 max-sm:col-span-1"
+      >
+        <span class="text-[0.68rem] uppercase tracking-[0.11em] text-[#7b8b7d] whitespace-nowrap"
+          >Huéspedes</span
+        >
         <button
-          class="booking-field__value booking-field__value--button"
           type="button"
+          class="flex items-center gap-[0.65rem] min-w-0 w-full border-0 p-0 bg-transparent text-left cursor-pointer text-[#183b11] text-base font-normal leading-[1.15]"
           @click="openGuests"
         >
-          <span class="booking-field__icon">👥</span>
-          <span class="booking-field__summary">{{ formatGuestSummary() }}</span>
-          <span class="booking-field__caret">⌄</span>
+          <span class="flex-none text-base">👥</span>
+          <span class="flex-1 min-w-0 mr-3 overflow-hidden text-ellipsis whitespace-nowrap">{{
+            formatGuestSummary()
+          }}</span>
+          <span class="text-[#94a0b2] text-[1.2rem] leading-none">⌄</span>
         </button>
 
-        <div v-if="guestsOpen" class="guest-popover" @click.stop>
-          <div class="guest-row">
-            <div class="guest-row__info">
-              <strong>Habitaciones</strong>
-            </div>
-            <div class="guest-stepper">
-              <button type="button" @click="updateGuestCount('rooms', -1)">−</button>
-              <span>{{ roomCount }}</span>
-              <button type="button" @click="updateGuestCount('rooms', 1)">+</button>
-            </div>
-          </div>
-
-          <div class="guest-row">
-            <div class="guest-row__info">
-              <strong>Adultos</strong>
-              <span>Desde 14 años</span>
-            </div>
-            <div class="guest-stepper">
-              <button type="button" @click="updateGuestCount('adults', -1)">−</button>
-              <span>{{ adultCount }}</span>
-              <button type="button" @click="updateGuestCount('adults', 1)">+</button>
-            </div>
-          </div>
-
-          <div class="guest-row">
-            <div class="guest-row__info">
-              <strong>Niños</strong>
-              <span>Hasta 13 años</span>
-            </div>
-            <div class="guest-stepper">
-              <button type="button" @click="updateGuestCount('children', -1)">−</button>
-              <span>{{ childCount }}</span>
-              <button type="button" @click="updateGuestCount('children', 1)">+</button>
+        <div
+          v-if="guestsOpen"
+          class="absolute left-1/2 -translate-x-1/2 bottom-[calc(100%+0.9rem)] z-7 w-[min(360px,calc(100vw-1rem))] p-4 border border-[#e1e4ee] rounded-[0.2rem] bg-white shadow-[0_22px_42px_rgba(0,0,0,0.16)]"
+          @click.stop
+        >
+          <div class="flex items-center justify-between gap-4 pt-[0.35rem] pb-[0.9rem]">
+            <strong class="text-[#1e2937] text-base font-bold">Habitaciones</strong>
+            <div
+              class="inline-flex items-center border border-[#cfd5e3] rounded-[0.18rem] overflow-hidden"
+            >
+              <button
+                type="button"
+                class="w-[2.2rem] h-[2.2rem] border-0 text-[#9aa4b7] bg-white text-[1.15rem] cursor-pointer"
+                @click="updateGuestCount('rooms', -1)"
+              >
+                −
+              </button>
+              <span
+                class="inline-grid place-items-center min-w-[2.2rem] h-[2.2rem] text-[#1f2a39] text-base font-medium bg-white"
+                >{{ roomCount }}</span
+              >
+              <button
+                type="button"
+                class="w-[2.2rem] h-[2.2rem] border-0 text-[#9aa4b7] bg-white text-[1.15rem] cursor-pointer"
+                @click="updateGuestCount('rooms', 1)"
+              >
+                +
+              </button>
             </div>
           </div>
-
-          <button class="guest-popover__accept" type="button" @click="acceptGuests">Aceptar</button>
+          <div
+            class="flex items-center justify-between gap-4 pt-[0.35rem] pb-[0.9rem] border-t border-[#edf0f5]"
+          >
+            <div class="grid gap-[0.15rem]">
+              <strong class="text-[#1e2937] text-base font-bold">Adultos</strong>
+              <span class="text-[#7d8798] text-[0.85rem]">Desde 14 años</span>
+            </div>
+            <div
+              class="inline-flex items-center border border-[#cfd5e3] rounded-[0.18rem] overflow-hidden"
+            >
+              <button
+                type="button"
+                class="w-[2.2rem] h-[2.2rem] border-0 text-[#9aa4b7] bg-white text-[1.15rem] cursor-pointer"
+                @click="updateGuestCount('adults', -1)"
+              >
+                −
+              </button>
+              <span
+                class="inline-grid place-items-center min-w-[2.2rem] h-[2.2rem] text-[#1f2a39] text-base font-medium bg-white"
+                >{{ adultCount }}</span
+              >
+              <button
+                type="button"
+                class="w-[2.2rem] h-[2.2rem] border-0 text-[#9aa4b7] bg-white text-[1.15rem] cursor-pointer"
+                @click="updateGuestCount('adults', 1)"
+              >
+                +
+              </button>
+            </div>
+          </div>
+          <div
+            class="flex items-center justify-between gap-4 pt-[0.35rem] pb-[0.9rem] border-t border-[#edf0f5]"
+          >
+            <div class="grid gap-[0.15rem]">
+              <strong class="text-[#1e2937] text-base font-bold">Niños</strong>
+              <span class="text-[#7d8798] text-[0.85rem]">Hasta 13 años</span>
+            </div>
+            <div
+              class="inline-flex items-center border border-[#cfd5e3] rounded-[0.18rem] overflow-hidden"
+            >
+              <button
+                type="button"
+                class="w-[2.2rem] h-[2.2rem] border-0 text-[#9aa4b7] bg-white text-[1.15rem] cursor-pointer"
+                @click="updateGuestCount('children', -1)"
+              >
+                −
+              </button>
+              <span
+                class="inline-grid place-items-center min-w-[2.2rem] h-[2.2rem] text-[#1f2a39] text-base font-medium bg-white"
+                >{{ childCount }}</span
+              >
+              <button
+                type="button"
+                class="w-[2.2rem] h-[2.2rem] border-0 text-[#9aa4b7] bg-white text-[1.15rem] cursor-pointer"
+                @click="updateGuestCount('children', 1)"
+              >
+                +
+              </button>
+            </div>
+          </div>
+          <button
+            type="button"
+            class="w-full min-h-11 mt-3 border border-brand rounded-[0.18rem] text-brand bg-white text-base cursor-pointer"
+            @click="acceptGuests"
+          >
+            Aceptar
+          </button>
         </div>
       </div>
 
-      <label class="booking-field booking-field--promo">
-        <input type="text" placeholder="Código promocional" aria-label="Código promocional" />
+      <label
+        class="flex flex-col justify-center items-center min-h-18 max-md:min-h-19 max-sm:min-h-17 px-[1.2rem] py-[0.82rem] border border-[#c7cfdb] text-[#617463] bg-white text-center max-md:col-start-2 max-md:col-end-3 max-sm:col-span-1"
+      >
+        <input
+          type="text"
+          placeholder="Código promocional"
+          aria-label="Código promocional"
+          class="block w-full border-0 outline-none bg-transparent text-[#8b95a9] text-[1.08rem] font-normal text-center placeholder:text-[#8b95a9]"
+        />
       </label>
 
-      <button class="booking-card__button" type="button">RESERVAR</button>
+      <button
+        type="button"
+        class="min-w-42 max-md:col-span-2 max-md:min-h-[3.4rem] max-sm:col-span-1 max-sm:w-full border-0 rounded-[0.18rem] px-5 text-white font-extrabold text-[0.94rem] tracking-wider bg-[linear-gradient(135deg,#34852d,#3f8c27)] cursor-pointer"
+      >
+        RESERVAR
+      </button>
     </div>
   </div>
 </template>
-
-<style scoped>
-.hero__booking {
-  position: absolute;
-  left: 50%;
-  bottom: 2.9rem;
-  z-index: 4;
-  width: min(1240px, calc(100% - 2.2rem));
-  transform: translateX(-50%);
-}
-
-.booking-card {
-  padding: 0.42rem;
-  border: 1px solid #d7dde7;
-  border-radius: 0.18rem;
-  background: rgba(255, 255, 255, 0.98);
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.14);
-}
-
-.booking-calendar {
-  position: absolute;
-  left: 0;
-  bottom: calc(100% + 0.9rem);
-  z-index: 6;
-  width: min(760px, calc(100vw - 2rem));
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 1rem;
-  padding: 1rem;
-  border: 1px solid #e6e8ef;
-  border-radius: 0.18rem;
-  background: #fff;
-  box-shadow: 0 22px 42px rgba(0, 0, 0, 0.16);
-}
-
-.calendar-month {
-  padding: 0.15rem 0.35rem 0.4rem;
-}
-
-.calendar-month__header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 0.8rem;
-}
-
-.calendar-month__title {
-  margin: 0;
-  color: #1f2a39;
-  font-size: 1rem;
-  font-weight: 700;
-  text-transform: capitalize;
-}
-
-.calendar-month__nav {
-  border: 0;
-  background: transparent;
-  color: #8d98ac;
-  font-size: 1.45rem;
-  line-height: 1;
-  cursor: pointer;
-}
-
-.calendar-weekdays {
-  display: grid;
-  grid-template-columns: repeat(7, minmax(0, 1fr));
-  margin-bottom: 0.35rem;
-  color: #7d8798;
-  font-size: 0.85rem;
-  text-transform: lowercase;
-  text-align: center;
-}
-
-.calendar-days {
-  display: grid;
-  grid-template-columns: repeat(7, minmax(0, 1fr));
-  gap: 0.08rem;
-}
-
-.calendar-day {
-  min-height: 2.45rem;
-  border: 0;
-  border-radius: 0.18rem;
-  background: transparent;
-  color: #243143;
-  font: inherit;
-  cursor: pointer;
-}
-
-.calendar-day:hover:not(:disabled) {
-  background: #eef4ea;
-}
-
-.calendar-day--outside,
-.calendar-day--disabled {
-  color: #d2d8e3;
-}
-
-.calendar-day--disabled {
-  cursor: not-allowed;
-}
-
-.calendar-day--in-range {
-  background: #dcefd7;
-  color: #274026;
-}
-
-.calendar-day--selected-start,
-.calendar-day--selected-end {
-  background: #3b7f2a;
-  color: #fff;
-}
-
-.calendar-day--selected-start.calendar-day--selected-end {
-  border-radius: 0.18rem;
-}
-
-.booking-grid {
-  display: grid;
-  grid-template-columns: minmax(0, 2.05fr) minmax(0, 2.45fr) minmax(0, 1.95fr) minmax(0, 170px);
-  align-items: stretch;
-  gap: 0.85rem;
-}
-
-.booking-grid__dates {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  overflow: hidden;
-  border: 1px solid #c7cfdb;
-  border-radius: 0.18rem;
-  background: #fff;
-}
-
-.booking-field {
-  display: grid;
-  align-content: center;
-  gap: 0.16rem;
-  min-height: 72px;
-  padding: 0.72rem 0.92rem;
-  border: 1px solid #c7cfdb;
-  color: #617463;
-  background: #fff;
-}
-
-.booking-field--date {
-  width: 100%;
-  cursor: pointer;
-  text-align: left;
-}
-
-.booking-field--date {
-  border: 0;
-  border-right: 1px solid #c7cfdb;
-  border-radius: 0;
-}
-
-.booking-field--date-end {
-  border-right: 0;
-}
-
-.booking-field--people,
-.booking-field--promo {
-  grid-template-rows: auto 1fr;
-}
-
-.booking-field--people {
-  position: relative;
-}
-
-.booking-field__value--button {
-  width: 100%;
-  border: 0;
-  padding: 0;
-  background: transparent;
-  text-align: left;
-  cursor: pointer;
-}
-
-.booking-field__summary {
-  flex: 1 1 auto;
-  min-width: 0;
-  margin-right: 0.75rem;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.booking-field__caret {
-  color: #94a0b2;
-  font-size: 1.2rem;
-  line-height: 1;
-}
-
-.booking-field--promo {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 0.82rem 1.2rem;
-  text-align: center;
-}
-
-.booking-field span {
-  font-size: 0.68rem;
-  text-transform: uppercase;
-  letter-spacing: 0.11em;
-  color: #7b8b7d;
-  white-space: nowrap;
-}
-
-.booking-field input,
-.booking-field select {
-  width: 100%;
-  margin: 0;
-  padding: 0;
-  border: 0;
-  outline: none;
-  background: transparent;
-  color: #29402a;
-  font: inherit;
-  appearance: none;
-}
-
-.booking-field input[type='date'] {
-  min-height: 1.4rem;
-  color: #29402a;
-}
-
-.booking-field input[type='date']::-webkit-calendar-picker-indicator {
-  opacity: 0;
-  cursor: pointer;
-}
-
-.booking-field__value {
-  display: flex;
-  align-items: center;
-  gap: 0.65rem;
-  min-width: 0;
-  color: #183b11;
-  font-family:
-    Inter,
-    -apple-system,
-    BlinkMacSystemFont,
-    'Segoe UI',
-    sans-serif;
-  font-size: 1rem;
-  font-weight: 400;
-  line-height: 1.15;
-}
-
-.booking-field__icon {
-  color: #183b11;
-  font-size: 1rem;
-  flex: 0 0 auto;
-}
-
-.guest-popover {
-  position: absolute;
-  left: 50%;
-  bottom: calc(100% + 0.9rem);
-  z-index: 7;
-  width: min(360px, calc(100vw - 1rem));
-  padding: 1rem;
-  border: 1px solid #e1e4ee;
-  border-radius: 0.2rem;
-  background: #fff;
-  box-shadow: 0 22px 42px rgba(0, 0, 0, 0.16);
-  transform: translateX(-50%);
-}
-
-.guest-row {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 1rem;
-  padding: 0.35rem 0 0.9rem;
-}
-
-.guest-row + .guest-row {
-  border-top: 1px solid #edf0f5;
-}
-
-.guest-row__info {
-  display: grid;
-  gap: 0.15rem;
-}
-
-.guest-row__info strong {
-  color: #1e2937;
-  font-size: 1rem;
-  font-weight: 700;
-}
-
-.guest-row__info span {
-  color: #7d8798;
-  font-size: 0.85rem;
-  text-transform: none;
-  letter-spacing: 0;
-  white-space: normal;
-}
-
-.guest-stepper {
-  display: inline-flex;
-  align-items: center;
-  border: 1px solid #cfd5e3;
-  border-radius: 0.18rem;
-  overflow: hidden;
-}
-
-.guest-stepper button {
-  width: 2.2rem;
-  height: 2.2rem;
-  border: 0;
-  color: #9aa4b7;
-  background: #fff;
-  font-size: 1.15rem;
-  cursor: pointer;
-}
-
-.guest-stepper span {
-  display: inline-grid;
-  place-items: center;
-  min-width: 2.2rem;
-  height: 2.2rem;
-  color: #1f2a39;
-  font-size: 1rem;
-  font-weight: 500;
-  background: #fff;
-}
-
-.guest-popover__accept {
-  width: 100%;
-  min-height: 2.75rem;
-  margin-top: 0.75rem;
-  border: 1px solid #2f7d32;
-  border-radius: 0.18rem;
-  color: #2f7d32;
-  background: #fff;
-  font-size: 1rem;
-  cursor: pointer;
-}
-
-.booking-field--promo input::placeholder {
-  color: #8b95a9;
-  opacity: 1;
-}
-
-.booking-field--promo input {
-  display: block;
-  width: 100%;
-  color: #8b95a9;
-  font-size: 1.08rem;
-  font-weight: 400;
-  text-align: center;
-}
-
-.booking-card__button {
-  min-width: 168px;
-  border: 0;
-  border-radius: 0.18rem;
-  padding: 0 1.25rem;
-  color: #fff;
-  font-weight: 800;
-  font-size: 0.94rem;
-  letter-spacing: 0.05em;
-  background: linear-gradient(135deg, #34852d, #3f8c27);
-  cursor: pointer;
-}
-
-@media (max-width: 980px) {
-  .hero__booking {
-    width: min(100% - 1.4rem, 1240px);
-    bottom: 2.1rem;
-  }
-
-  .booking-grid {
-    grid-template-columns: 1.05fr 1.05fr;
-    gap: 0.75rem;
-  }
-
-  .booking-grid__dates {
-    grid-column: 1 / -1;
-  }
-
-  .booking-field--people {
-    grid-column: 1 / 2;
-  }
-
-  .booking-field--promo {
-    grid-column: 2 / 3;
-    min-height: 76px;
-  }
-
-  .booking-field--people,
-  .booking-field--promo {
-    min-height: 72px;
-  }
-
-  .booking-card__button {
-    grid-column: 1 / -1;
-    min-height: 3.4rem;
-    width: 100%;
-  }
-
-  .guest-popover {
-    width: min(360px, calc(100vw - 1.5rem));
-  }
-
-  .booking-calendar {
-    width: min(760px, calc(100vw - 1.5rem));
-  }
-}
-
-@media (max-width: 640px) {
-  .hero__booking {
-    width: calc(100% - 0.95rem);
-    bottom: 1.45rem;
-  }
-
-  .booking-grid {
-    grid-template-columns: 1fr;
-    gap: 0.65rem;
-  }
-
-  .booking-calendar {
-    left: 50%;
-    width: calc(100vw - 0.9rem);
-    grid-template-columns: 1fr;
-    transform: translateX(-50%);
-    gap: 0.75rem;
-  }
-
-  .booking-grid__dates,
-  .booking-field--people,
-  .booking-field--promo,
-  .booking-card__button {
-    grid-column: 1 / -1;
-  }
-
-  .booking-grid__dates {
-    grid-template-columns: 1fr 1fr;
-  }
-
-  .booking-field--people,
-  .booking-field--promo {
-    min-height: 68px;
-  }
-
-  .booking-card__button {
-    width: 100%;
-    min-height: 3.4rem;
-  }
-
-  .guest-popover {
-    left: 50%;
-    width: calc(100vw - 0.9rem);
-    transform: translateX(-50%);
-  }
-}
-</style>

@@ -1,9 +1,11 @@
 @import url('https://fonts.googleapis.com/css2?family=Questrial&display=swap');
+@import 'tailwindcss';
 
-#app {
-  width: 100%;
-  min-height: 100vh;
-  font-weight: normal;
+@theme {
+  --color-brand: #2f7d32;
+  --color-brand-dark: #163019;
+  --color-brand-light: #f6faf3;
+  --font-questrial: 'Questrial', sans-serif;
 }
 
 html,
@@ -11,10 +13,10 @@ body,
 #app {
   margin: 0;
   padding: 0;
+  min-height: 100vh;
 }
 
 body {
-  min-height: 100vh;
   background: #f6faf3;
   color: #163019;
   font-family:
