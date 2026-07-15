@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import BookingBar from '../components/booking/BookingBar.vue'
+import SiteFooter from '../components/footer/SiteFooter.vue'
 import HeroHeader from '../components/hero/HeroHeader.vue'
 
 const navItems = [
@@ -122,5 +123,7 @@ const heroVideoUrl =
         </article>
       </div>
     </section>
+
+    <SiteFooter />
   </main>
 </template>
