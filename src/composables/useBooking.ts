@@ -183,6 +183,34 @@ export function useBooking() {
     ]
   }
 
+  function isDateInSelectedRange(date: Date) {
+    if (!startDate.value) {
+      return false
+    }
+
+    if (!endDate.value) {
+      return isSameDay(date, startDate.value)
+    }
+
+    return !isBeforeDay(date, startDate.value) && !isBeforeDay(endDate.value, date)
+  }
+
+  function isDateInSelectedRangeExclusive(date: Date) {
+    if (!startDate.value || !endDate.value) {
+      return false
+    }
+
+    return isBeforeDay(startDate.value, date) && isBeforeDay(date, endDate.value)
+  }
+
+  function isStartDate(date: Date) {
+    return isSameDay(date, startDate.value)
+  }
+
+  function isEndDate(date: Date) {
+    return isSameDay(date, endDate.value)
+  }
+
   function handleDocumentClick(event: MouseEvent) {
     const target = event.target as Node | null
 
@@ -210,6 +238,10 @@ export function useBooking() {
     formatGuestSummary,
     formatSelectedDay,
     getCalendarDayClass,
+    isDateInSelectedRangeExclusive,
+    isDateInSelectedRange,
+    isEndDate,
+    isStartDate,
     guestCounts: {
       roomCount,
       adultCount,

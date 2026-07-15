@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { ComponentPublicInstance } from 'vue'
 import { useBooking } from '../../composables/useBooking'
 
 const {
@@ -11,7 +12,9 @@ const {
   childCount,
   formatGuestSummary,
   formatSelectedDay,
-  getCalendarDayClass,
+  isDateInSelectedRangeExclusive,
+  isEndDate,
+  isStartDate,
   guestsOpen,
   openCalendar,
   openGuests,
@@ -22,11 +25,15 @@ const {
   updateGuestCount,
   weekdayLabels,
 } = useBooking()
+
+function setBookingRef(element: Element | ComponentPublicInstance | null) {
+  bookingRef.value = element instanceof HTMLElement ? element : null
+}
 </script>
 
 <template>
   <div
-    ref="bookingRef"
+    :ref="setBookingRef"
     id="reservar"
     class="absolute left-1/2 -translate-x-1/2 bottom-[2.9rem] max-md:bottom-[2.1rem] max-sm:bottom-[1.45rem] z-4 w-[min(1240px,calc(100%-2.2rem))] max-md:w-[min(100%-1.4rem,1240px)] max-sm:w-[calc(100%-0.95rem)] p-[0.42rem] border border-[#d7dde7] rounded-[0.18rem] bg-white/98 shadow-[0_12px_28px_rgba(0,0,0,0.14)]"
   >
@@ -62,19 +69,11 @@ const {
             :key="`${cell.date.getFullYear()}-${cell.date.getMonth()}-${cell.date.getDate()}`"
             type="button"
             :class="[
-              'min-h-[2.45rem] border-0 rounded-[0.18rem] bg-transparent font-[inherit] cursor-pointer',
+              'min-h-[2.45rem] border-0 rounded-[0.18rem] font-[inherit] cursor-pointer',
               cell.disabled ? 'text-[#d2d8e3] cursor-not-allowed' : 'text-[#243143]',
               !cell.inCurrentMonth && 'text-[#d2d8e3]',
-              getCalendarDayClass(cell.date, cell.inCurrentMonth).includes(
-                'calendar-day--in-range',
-              ) && 'bg-[#dcefd7] text-[#274026]',
-              (getCalendarDayClass(cell.date, cell.inCurrentMonth).includes(
-                'calendar-day--selected-start',
-              ) ||
-                getCalendarDayClass(cell.date, cell.inCurrentMonth).includes(
-                  'calendar-day--selected-end',
-                )) &&
-                'bg-[#3b7f2a]! text-white!',
+              isDateInSelectedRangeExclusive(cell.date) && 'bg-[#dcefd7] text-[#274026]',
+              (isStartDate(cell.date) || isEndDate(cell.date)) && 'bg-[#3b7f2a] text-white',
             ]"
             :disabled="cell.disabled"
             @click="selectCalendarDate(cell.date)"
