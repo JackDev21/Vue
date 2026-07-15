@@ -1,4 +1,4 @@
-# Jardines de Uleta Suites — Landing page
+# Hotel Demo Suites  — Landing page
 
 Hotel landing page construida con Vue 3, TypeScript y Vite.
 
