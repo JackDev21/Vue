@@ -52,6 +52,7 @@ export function useBooking() {
     bookingRef,
     calendarOpen: calendar.calendarOpen,
     calendarMonths: calendar.calendarMonths,
+    canGoBack: calendar.canGoBack,
     childCount: guests.childCount,
     closeCalendar: calendar.closeCalendar,
     closeGuests: guests.closeGuests,

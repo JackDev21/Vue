@@ -74,12 +74,12 @@ function navHref(item: string): string {
             v-for="item in navItems"
             :key="item"
             :href="navHref(item)"
-            class="inline-flex items-center min-h-8 px-[0.6rem] text-[#355436] font-questrial text-[0.9375rem] font-normal no-underline"
+            class="inline-flex items-center min-h-8 px-[0.6rem] text-[#355436] font-questrial text-[0.9375rem] font-normal no-underline relative hover:text-brand transition-colors duration-200 after:content-[''] after:absolute after:bottom-0 after:left-[0.6rem] after:right-[0.6rem] after:h-[2px] after:bg-brand after:scale-x-0 hover:after:scale-x-100 after:transition-transform after:duration-300 after:origin-left"
             >{{ item }}</a
           >
           <a
             href="#reservar"
-            class="inline-flex items-center min-h-8 pl-[0.9rem] pr-[0.7rem] rounded-[0.15rem] text-brand font-questrial text-[0.9375rem] font-normal border-l border-black/8"
+            class="inline-flex items-center min-h-8 pl-[0.9rem] pr-[0.7rem] rounded-[0.15rem] text-brand font-questrial text-[0.9375rem] font-normal border-l border-black/8 hover:text-brand-dark hover:bg-brand-light transition-colors duration-200"
             >MI RESERVA ▾</a
           >
         </div>

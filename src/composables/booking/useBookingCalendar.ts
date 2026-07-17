@@ -21,6 +21,10 @@ export function useBookingCalendar(params: {
   const calendarAnchor = ref<CalendarAnchor>('start')
   const visibleMonth = ref(startOfMonth(referenceDate))
 
+  const canGoBack = computed(() => {
+    return visibleMonth.value.getTime() > startOfMonth(referenceDate).getTime()
+  })
+
   const weekdayLabels = ['lun', 'mar', 'mié', 'jue', 'vie', 'sáb', 'dom']
 
   const calendarMonths = computed(() =>
@@ -135,6 +139,7 @@ export function useBookingCalendar(params: {
   return {
     calendarOpen,
     calendarMonths,
+    canGoBack,
     closeCalendar,
     formatSelectedDay,
     getCalendarDayClass,
