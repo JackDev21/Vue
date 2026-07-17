@@ -1,3 +1,16 @@
+<script setup lang="ts">
+import {
+  IconMapPin,
+  IconPhone,
+  IconRoute,
+  IconShare,
+  IconBrandFacebook,
+  IconBrandTwitter,
+  IconBrandInstagram,
+  IconBrandLinkedin,
+} from '@tabler/icons-vue'
+</script>
+
 <template>
   <footer class="mt-[clamp(2.4rem,5vw,4.3rem)] text-[#101f2f]">
     <section class="bg-[#e3e3e3]">
@@ -10,16 +23,7 @@
               Dirección
             </h4>
             <span aria-hidden="true" class="inline-block w-[1.85rem] h-[1.85rem] text-[#2d7a22]">
-              <svg
-                viewBox="0 0 24 24"
-                class="w-full h-full"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.9"
-              >
-                <path d="M12 22s7-6.2 7-12a7 7 0 1 0-14 0c0 5.8 7 12 7 12Z" />
-                <circle cx="12" cy="10" r="2.6" />
-              </svg>
+              <IconMapPin class="w-full h-full" />
             </span>
           </header>
           <p
@@ -35,17 +39,7 @@
               Contacto
             </h4>
             <span aria-hidden="true" class="inline-block w-[1.85rem] h-[1.85rem] text-[#2d7a22]">
-              <svg
-                viewBox="0 0 24 24"
-                class="w-full h-full"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.9"
-              >
-                <path
-                  d="M6.7 3.3 9.8 6.4c.5.5.6 1.3.2 1.9L8.5 10c1 2.1 2.7 3.8 4.8 4.8l1.7-1.5c.6-.5 1.4-.4 1.9.2l3.1 3.1c.6.6.6 1.5 0 2.1l-1.4 1.4c-.8.8-2 .9-3 .4A22 22 0 0 1 3.2 8.7c-.5-1-.4-2.2.4-3L5 3.3c.6-.6 1.5-.6 1.7 0Z"
-                />
-              </svg>
+              <IconPhone class="w-full h-full" />
             </span>
           </header>
           <p
@@ -64,15 +58,7 @@
               Cómo llegar
             </h4>
             <span aria-hidden="true" class="inline-block w-[1.85rem] h-[1.85rem] text-[#2d7a22]">
-              <svg
-                viewBox="0 0 24 24"
-                class="w-full h-full"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.9"
-              >
-                <path d="m21 3-8 18-2.2-7.8L3 11 21 3Z" />
-              </svg>
+              <IconRoute class="w-full h-full" />
             </span>
           </header>
           <p
@@ -88,18 +74,7 @@
               Síguenos en ...
             </h4>
             <span aria-hidden="true" class="inline-block w-[1.85rem] h-[1.85rem] text-[#2d7a22]">
-              <svg
-                viewBox="0 0 24 24"
-                class="w-full h-full"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="1.9"
-              >
-                <circle cx="6" cy="12" r="2" fill="currentColor" />
-                <circle cx="18" cy="6" r="2" fill="currentColor" />
-                <circle cx="18" cy="18" r="2" fill="currentColor" />
-                <path d="M8 11 16 7M8 13l8 4" />
-              </svg>
+              <IconShare class="w-full h-full" />
             </span>
           </header>
           <nav class="mt-[1.35rem] flex items-center gap-4" aria-label="Redes sociales">
@@ -110,11 +85,7 @@
               rel="noreferrer noopener"
               class="grid w-[1.45rem] h-[1.45rem] place-items-center text-[#0b0f14] hover:text-[#2d7a22]"
             >
-              <svg viewBox="0 0 24 24" class="w-full h-full fill-current" aria-hidden="true">
-                <path
-                  d="M13.5 21v-8h2.7l.4-3h-3.1V8.2c0-.9.3-1.5 1.6-1.5h1.7V4c-.3 0-1.2-.1-2.4-.1-2.4 0-4 1.4-4 4.1V10H8v3h2.4v8h3.1Z"
-                />
-              </svg>
+              <IconBrandFacebook class="w-full h-full" />
             </a>
             <a
               href="https://x.com/JardinesUleta"
@@ -123,11 +94,7 @@
               rel="noreferrer noopener"
               class="grid w-[1.45rem] h-[1.45rem] place-items-center text-[#0b0f14] hover:text-[#2d7a22]"
             >
-              <svg viewBox="0 0 24 24" class="w-full h-full fill-current" aria-hidden="true">
-                <path
-                  d="m4 4 6.5 8.7L4.2 20h2.2l5.1-5.9L16.1 20H20l-6.8-9.1L19 4h-2.2l-4.7 5.4L8 4H4Z"
-                />
-              </svg>
+              <IconBrandTwitter class="w-full h-full" />
             </a>
             <a
               href="https://www.instagram.com/jardinesdeuleta/"
@@ -136,11 +103,7 @@
               rel="noreferrer noopener"
               class="grid w-[1.45rem] h-[1.45rem] place-items-center text-[#0b0f14] hover:text-[#2d7a22]"
             >
-              <svg viewBox="0 0 24 24" class="w-full h-full fill-current" aria-hidden="true">
-                <path
-                  d="M7 3h10a4 4 0 0 1 4 4v10a4 4 0 0 1-4 4H7a4 4 0 0 1-4-4V7a4 4 0 0 1 4-4Zm5 4.7A4.3 4.3 0 1 0 12 16.3 4.3 4.3 0 0 0 12 7.7Zm0 1.8A2.5 2.5 0 1 1 9.5 12 2.5 2.5 0 0 1 12 9.5Zm5.1-3a1 1 0 1 0 0 2 1 1 0 0 0 0-2Z"
-                />
-              </svg>
+              <IconBrandInstagram class="w-full h-full" />
             </a>
             <a
               href="https://www.linkedin.com/company/hotel-jardines-de-uleta-suites/?originalSubdomain=es"
@@ -149,11 +112,7 @@
               rel="noreferrer noopener"
               class="grid w-[1.45rem] h-[1.45rem] place-items-center text-[#0b0f14] hover:text-[#2d7a22]"
             >
-              <svg viewBox="0 0 24 24" class="w-full h-full fill-current" aria-hidden="true">
-                <path
-                  d="M4.7 3.8A1.9 1.9 0 1 1 2.8 5.7a1.9 1.9 0 0 1 1.9-1.9ZM3.3 8h2.8v12H3.3V8Zm4.7 0h2.7v1.6h.1c.4-.7 1.4-1.9 3-1.9 3.2 0 3.8 2.1 3.8 4.8V20h-2.8v-6.7c0-1.6 0-3.6-2.2-3.6-2.2 0-2.5 1.7-2.5 3.5V20H8V8Z"
-                />
-              </svg>
+              <IconBrandLinkedin class="w-full h-full" />
             </a>
           </nav>
         </article>
